@@ -4,7 +4,7 @@ import com.ozerian.app.model.Player;
 
 public interface FindOpponentService {
 
-    boolean registerReadyPlayer();
+    boolean registerReadyPlayer(Player newPlayer);
 
     Player findOpponent(Player readyPlayer);
 }
