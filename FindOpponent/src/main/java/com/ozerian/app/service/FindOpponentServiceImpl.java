@@ -13,8 +13,8 @@ public class FindOpponentServiceImpl implements FindOpponentService {
 
     private Set<Player> readyPlayers;
 
-    public FindOpponentServiceImpl(Set<Player> readyPlayers) {
-        this.readyPlayers = readyPlayers;
+    public FindOpponentServiceImpl() {
+        this.readyPlayers = new TreeSet<>();
     }
 
     @Override
