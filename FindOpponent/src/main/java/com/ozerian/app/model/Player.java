@@ -3,14 +3,11 @@ package com.ozerian.app.model;
 /**
  * Class for representation of Player entity.
  */
-public class Player {
+public class Player implements Comparable<Player>{
 
     private String nickName;
     private double rating;
     private boolean isReady;
-
-    public Player() {
-    }
 
     public Player(String nickName, double rating, boolean isReady) {
         this.nickName = nickName;
@@ -73,5 +70,16 @@ public class Player {
                 ", rating=" + rating +
                 ", isReady=" + isReady +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Player anotherPlayer) {
+        if (this.getRating() > anotherPlayer.getRating()) {
+            return 1;
+        } else if (this.getRating() < anotherPlayer.getRating()) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }
