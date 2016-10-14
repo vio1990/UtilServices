@@ -34,9 +34,8 @@ public class WordCounterServiceImplTest {
     }
 
     @Test
-    public void consumeExistingWordTestSecondTime() throws Exception {
+    public void consumeExistingWordTestFewTime() throws Exception {
         String existingWord = "word";
-
         assertEquals(true, wordsStorage.containsKey(existingWord));
         wordCounterService.consumeWord(existingWord);
         assertEquals(true, wordsStorage.containsKey(existingWord));
