@@ -1,7 +1,7 @@
 package com.ozerian.app.service;
 
 import com.ozerian.app.exceptions.ThereIsNoOpponentException;
-import com.ozerian.app.model.Player;
+import com.ozerian.app.model.entity.Player;
 
 /**
  * Interface for service with appropriate defined methods.
