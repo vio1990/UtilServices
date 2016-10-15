@@ -1,7 +1,8 @@
 package com.ozerian.app.service;
 
 import com.ozerian.app.exceptions.ThereIsNoOpponentException;
-import com.ozerian.app.model.Player;
+import com.ozerian.app.model.entity.Player;
+import com.ozerian.app.service.impl.FindOpponentServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 

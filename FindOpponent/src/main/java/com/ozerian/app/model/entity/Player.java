@@ -1,4 +1,4 @@
-package com.ozerian.app.model;
+package com.ozerian.app.model.entity;
 
 /**
  * This class is for representation of Player entity and
