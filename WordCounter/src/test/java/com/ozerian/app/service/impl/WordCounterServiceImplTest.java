@@ -17,15 +17,11 @@ public class WordCounterServiceImplTest {
     public void setUp() throws Exception {
         wordCounterService = new WordCounterServiceImpl();
         wordsStorage = wordCounterService.getWordsStorage();
-        wordsStorage.put("word", new AtomicInteger(1));
-        wordsStorage.put("house", new AtomicInteger(1));
-        wordsStorage.put("car", new AtomicInteger(1));
-        wordsStorage.put("girl", new AtomicInteger(1));
-
     }
 
     @Test
     public void consumeNewWordTestFirstTime() throws Exception {
+        wordsStorage.put("word", new AtomicInteger(1));
         String newWord = "another";
         assertEquals(false, wordsStorage.containsKey(newWord));
         wordCounterService.consumeWord(newWord);
@@ -35,6 +31,7 @@ public class WordCounterServiceImplTest {
 
     @Test
     public void consumeExistingWordTestFewTime() throws Exception {
+        wordsStorage.put("word", new AtomicInteger(1));
         String existingWord = "word";
         assertEquals(true, wordsStorage.containsKey(existingWord));
         wordCounterService.consumeWord(existingWord);
@@ -53,6 +50,7 @@ public class WordCounterServiceImplTest {
 
     @Test
     public void ignoreCaseNewWordConsumeTest() throws Exception {
+        wordsStorage.put("word", new AtomicInteger(1));
         String existingWord = "WoRd";
         assertEquals(true, wordCounterService.consumeWord(existingWord));
         String ignoreCaseWord = existingWord.toLowerCase();
@@ -61,7 +59,8 @@ public class WordCounterServiceImplTest {
 
     @Test
     public void ignoreCaseNewWordPassTest() throws Exception {
-        String existingWord = "CAR";
+        wordsStorage.put("word", new AtomicInteger(1));
+        String existingWord = "WORD";
         assertEquals(1, wordCounterService.countWordPassing(existingWord));
         String ignoreCaseWord = existingWord.toLowerCase();
         assertEquals(1, wordsStorage.get(ignoreCaseWord).get());
@@ -69,7 +68,8 @@ public class WordCounterServiceImplTest {
 
     @Test
     public void countNotConsumedWordPassing() throws Exception {
-        String newWord = "game";
+        wordsStorage.put("word", new AtomicInteger(1));
+        String newWord = "new";
         assertEquals(false, wordsStorage.containsKey(newWord));
         assertEquals(0, wordCounterService.countWordPassing(newWord));
     }
