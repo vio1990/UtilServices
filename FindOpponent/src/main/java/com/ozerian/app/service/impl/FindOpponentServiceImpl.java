@@ -1,7 +1,8 @@
-package com.ozerian.app.service;
+package com.ozerian.app.service.impl;
 
 import com.ozerian.app.exceptions.ThereIsNoOpponentException;
-import com.ozerian.app.model.Player;
+import com.ozerian.app.model.entity.Player;
+import com.ozerian.app.service.FindOpponentService;
 
 import java.util.NavigableSet;
 import java.util.TreeSet;
