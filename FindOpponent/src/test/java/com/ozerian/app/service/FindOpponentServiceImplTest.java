@@ -1,7 +1,6 @@
 package com.ozerian.app.service;
 
-import com.ozerian.app.exceptions.PlayerIsNotReadyException;
-import com.ozerian.app.exceptions.TheSamePlayersNickException;
+import com.ozerian.app.exceptions.ThereIsNoOpponentException;
 import com.ozerian.app.model.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,19 +18,6 @@ public class FindOpponentServiceImplTest {
     public void setUp() throws Exception {
         findOpponentService = new FindOpponentServiceImpl();
         readyPlayersList = findOpponentService.getReadyPlayers();
-        readyPlayersList.add(new Player("1", 13.15, true));
-        readyPlayersList.add(new Player("2", 13.15, true));
-        readyPlayersList.add(new Player("3", 13.17, true));
-        readyPlayersList.add(new Player("4", 13.14, true));
-        readyPlayersList.add(new Player("5", 75.45, true));
-        readyPlayersList.add(new Player("6", 175.8, true));
-        readyPlayersList.add(new Player("7", 9.8, true));
-        readyPlayersList.add(new Player("8", 2.55, true));
-        readyPlayersList.add(new Player("9", 0, true));
-        readyPlayersList.add(new Player("10", 2.55, true));
-        readyPlayersList.add(new Player("11", 175.15, true));
-        readyPlayersList.add(new Player("12", 176.15, true));
-
     }
 
     @Test
@@ -58,13 +44,28 @@ public class FindOpponentServiceImplTest {
     @Test
     public void registerReadyPlayer() throws Exception {
         Player readyPlayer = new Player("13", 11.14, true);
-        findOpponentService.registerReadyPlayer(readyPlayer);
-        assertEquals(true,  findOpponentService.registerReadyPlayer(readyPlayer));
+        boolean actual = findOpponentService.registerReadyPlayer(readyPlayer);
+        assertEquals(true,  actual);
     }
 
     @Test
     public void findOpponentFirstEqualsRating() throws Exception {
-        Player readyPlayer = new Player("15", 13.15, true);
+        readyPlayersList.add(new Player("1", 13.14, true));
+        readyPlayersList.add(new Player("2", 13.15, true));
+        readyPlayersList.add(new Player("3", 13.16, true));
+        Player readyPlayer = new Player("4", 13.15, true);
+        Player actualOpponent = findOpponentService.findOpponent(readyPlayer);
+        Player expectedOpponent = new Player("2", 13.15, true);
+        assertEquals(expectedOpponent, actualOpponent);
+        assertEquals(false, readyPlayersList.contains(actualOpponent));
+    }
+
+    @Test
+    public void findOpponentAllEqualsRating() throws Exception {
+        readyPlayersList.add(new Player("1", 13.15, true));
+        readyPlayersList.add(new Player("2", 13.15, true));
+        readyPlayersList.add(new Player("3", 13.15, true));
+        Player readyPlayer = new Player("4", 13.15, true);
         Player actualOpponent = findOpponentService.findOpponent(readyPlayer);
         Player expectedOpponent = new Player("1", 13.15, true);
         assertEquals(expectedOpponent, actualOpponent);
@@ -73,35 +74,67 @@ public class FindOpponentServiceImplTest {
 
     @Test
     public void findOpponentFirstHighClosestRating() throws Exception {
-        Player readyPlayer = new Player("16", 7.3, true);
+        readyPlayersList.add(new Player("1", 8.73, true));
+        readyPlayersList.add(new Player("2", 9.6, true));
+        readyPlayersList.add(new Player("3", 9.9, true));
+        Player readyPlayer = new Player("4", 9.8, true);
         Player actualOpponent = findOpponentService.findOpponent(readyPlayer);
-        Player expectedOpponent = new Player("7", 9.8, true);
+        Player expectedOpponent = new Player("3", 9.9, true);
         assertEquals(expectedOpponent, actualOpponent);
         assertEquals(false, readyPlayersList.contains(actualOpponent));
     }
 
     @Test
     public void findOpponentFirstLowClosestRating() throws Exception {
-        Player readyPlayer = new Player("17", 180.0, true);
+        readyPlayersList.add(new Player("1", 8.73, true));
+        readyPlayersList.add(new Player("2", 25.6, true));
+        readyPlayersList.add(new Player("3", 22.21, true));
+        Player readyPlayer = new Player("4", 23.23, true);
         Player actualOpponent = findOpponentService.findOpponent(readyPlayer);
-        Player expectedOpponent = new Player("12", 176.15, true);
+        Player expectedOpponent = new Player("3", 22.21, true);
         assertEquals(expectedOpponent, actualOpponent);
         assertEquals(false, readyPlayersList.contains(actualOpponent));
     }
 
     @Test
     public void findOpponentBetweenTwoClosestRating() throws Exception {
-        Player readyPlayer = new Player("18", 13.16, true);
+        readyPlayersList.add(new Player("1", 12.14, true));
+        readyPlayersList.add(new Player("2", 12.16, true));
+        Player readyPlayer = new Player("3", 12.15, true);
         Player actualOpponent = findOpponentService.findOpponent(readyPlayer);
-        Player expectedOpponent = new Player("1", 13.15, true);
+        Player expectedOpponent = new Player("1", 12.14, true);
         assertEquals(expectedOpponent, actualOpponent);
         assertEquals(false, readyPlayersList.contains(actualOpponent));
     }
 
     @Test
-    public void deleteOpponentFromListTest() throws Exception {
-        Player readyPlayer = new Player("19", 76.1, true);
-        Player expectedOpponent = new Player("5", 75.45, true);
+    public void deleteOpponentFromSetTest() throws Exception {
+        readyPlayersList.add(new Player("1", 12.12, true));
+        readyPlayersList.add(new Player("2", 13.13, true));
+        Player readyPlayer = new Player("3", 13.2, true);
+        Player expectedOpponent = new Player("2", 13.13, true);
+        assertEquals(true, readyPlayersList.contains(expectedOpponent));
+        Player actualOpponent = findOpponentService.findOpponent(readyPlayer);
+        assertEquals(expectedOpponent, actualOpponent);
+        assertEquals(false, readyPlayersList.contains(actualOpponent));
+    }
+
+    @Test
+    public void findOpponentHigherNullTest() throws Exception {
+        readyPlayersList.add(new Player("1", 12.12, true));
+        Player readyPlayer = new Player("2", 13.2, true);
+        Player expectedOpponent = new Player("1", 12.12, true);
+        assertEquals(true, readyPlayersList.contains(expectedOpponent));
+        Player actualOpponent = findOpponentService.findOpponent(readyPlayer);
+        assertEquals(expectedOpponent, actualOpponent);
+        assertEquals(false, readyPlayersList.contains(actualOpponent));
+    }
+
+    @Test
+    public void findOpponentLowerOrEqualNullTest() throws Exception {
+        readyPlayersList.add(new Player("1", 14.15, true));
+        Player readyPlayer = new Player("2", 13.2, true);
+        Player expectedOpponent = new Player("1", 14.15, true);
         assertEquals(true, readyPlayersList.contains(expectedOpponent));
         Player actualOpponent = findOpponentService.findOpponent(readyPlayer);
         assertEquals(expectedOpponent, actualOpponent);
@@ -120,28 +153,10 @@ public class FindOpponentServiceImplTest {
         findOpponentService.findOpponent(nullPlayer);
     }
 
-    @Test(expected = PlayerIsNotReadyException.class)
-    public void notReadyExceptionRegisterTest() throws Exception {
-        Player unreadyPlayer = new Player("21", 25.15, false);
-        findOpponentService.registerReadyPlayer(unreadyPlayer);
-    }
-
-    @Test(expected = PlayerIsNotReadyException.class)
-    public void notReadyExceptionFindOpponentTest() throws Exception {
-        Player unreadyPlayer = new Player("20", 15.15, false);
-        findOpponentService.findOpponent(unreadyPlayer);
-    }
-
-    @Test(expected = TheSamePlayersNickException.class)
-    public void theSamePlayerNameFindOpponentTest() throws Exception {
-        Player theSameNickPlayer = new Player("2", 15.15, true);
-        findOpponentService.findOpponent(theSameNickPlayer);
-    }
-
-    @Test(expected = TheSamePlayersNickException.class)
-    public void theSamePlayerNameRegisterTest() throws Exception {
-        Player theSameNickPlayer = new Player("3", 15.15, true);
-        findOpponentService.registerReadyPlayer(theSameNickPlayer);
+    @Test(expected = ThereIsNoOpponentException.class)
+    public void ThereIsNoOpponentTest() throws Exception {
+        Player singlePlayer = new Player("2", 15.15, true);
+        findOpponentService.findOpponent(singlePlayer);
     }
 
 }
